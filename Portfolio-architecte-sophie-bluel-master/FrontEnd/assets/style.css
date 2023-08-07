@@ -153,11 +153,31 @@ li:hover {
 	font-size: 16px;
 	font-weight: 700;
 	font-family: 'Syne', sans-serif;
+	background-color: white;
+	cursor: pointer;
 }
-.filter_button:active{
+
+.filter_all{
+	color: #1D6154;
+	padding: 10px;
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: 700;
+	font-family: 'Syne', sans-serif;
+	background-color: white;
+	cursor: pointer;
+}
+.is-active {
 	color: white;
 	background-color: #1D6154;
 }
+.is-active-all {
+	color: white;
+	background-color: #1D6154;
+}
+
 #contact {
 	width: 50%;
 margin: auto;
