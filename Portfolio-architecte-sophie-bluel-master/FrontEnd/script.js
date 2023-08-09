@@ -1,4 +1,4 @@
-const URL = "http://localhost:5678/api/";
+const Url = "http://localhost:5678/api/";
 const all = document.querySelector(".all");
 const postsContainer = document.querySelector(".gallery");
 const filterContainer = document.querySelector(".filter");
@@ -6,7 +6,7 @@ const filterContainer = document.querySelector(".filter");
 let postsData = "";
 let filterData = "";
 
-fetch(URL + "works")
+fetch(Url + "works")
 .then(async (response) => {
   postsData = await response.json();
   postsData.map((post) => createPost(post));
@@ -97,61 +97,3 @@ const resetPosts = () => {
   postsContainer.innerHTML = "";
   postsData.map((post) => createPost(post));
 }
-
-// const allPosts = (touch) => {
-//   resetPosts();
-//   // if (stateTouch =='is-active'){
-//   touch.classList.remove('is-active');
-//   touch.setAttribute('data-state', 'inactive');
-// // }
-// }
-// fetch(URL + "categories")
-// .then((resp) => resp.json())
-// .then(function(data) {
-//     let categories = data;
-//     console.log(data);
-//     return categories?.map(function(categorie) {
-//     let div = createNode('div');
-//     div.classList.add("filter_button");
-//     let categoriesName = createNode('p');
-
-//     categoriesName.innerHTML = categorie.name;
-//     append(filter, div);
-//     append(div, categoriesName);
-//     })
-
-// })
-// .catch(function(error) {
-//     console.log(error);
-// });
-
-// fetch(URL + "works")
-// .then((resp) => resp.json())
-// .then(function(data) {
-//     let works = data;
-//     console.log(data);
-//     return works?.map(function(work) {
-//     let figure = createNode('figure');
-//     let image = createNode('img');
-//     let title = createNode('figcaption');
-
-//     image.src = work.imageUrl
-//     title.innerHTML = work.title;
-//     append(figure, image);
-//     append(figure, title);
-//     append(gallery, figure);
-//     })
-// })
-
-// .catch(function(error) {
-//     console.log(error);
-// });
-
-
-// // function
-// function createNode(element) {
-// 	return document.createElement(element);
-// };
-// function append(parent, el) {
-// 	return parent.appendChild(el)
-// };
