@@ -1,5 +1,5 @@
 const Url = "http://localhost:5678/api/";
-const all = document.querySelector(".all");
+const all = document.querySelector(".all_button");
 const postsContainer = document.querySelector(".gallery");
 const filterContainer = document.querySelector(".filter");
 const editionGallery = document.querySelector(".edition_gallery");
@@ -10,7 +10,7 @@ let filterData = "";
 async function fetchWorks() {
   const response = await fetch(Url + "works");
   postsData = await response.json();
-  postsData.map((post) => createPost(post));
+  postsData.map((post) => GenerateGallery(post));
   filterData = [
     ...new Set(
       postsData
@@ -18,14 +18,14 @@ async function fetchWorks() {
     )
   ];
   console.log(filterData);
-  filterData.map((filter) => createFilter(filter));
+  filterData.map((filter) => GenerateButtonFilter(filter));
 };
 
 fetchWorks().catch(error => {
   error.message; // 'An error has occurred: 404'
 });
 
-const createPost = (postData) => {
+const GenerateGallery = (postData) => {
   const { title, imageUrl, category } = postData;
   const post = document.createElement("div");
   post.className = "post";
@@ -36,7 +36,7 @@ const createPost = (postData) => {
   postsContainer.append(post);
 };
 
-const createFilter = (filter) => {
+const GenerateButtonFilter = (filter) => {
   const filterButton = document.createElement("button");
   filterButton.className = "filter_button";
   filterButton.innerText = filter;
@@ -62,42 +62,41 @@ const handleButtonClick = (e, param) => {
   const button = e.target;
   const buttonState = button.getAttribute('data-state');
   resetFilterButtons(button);
-  // all.addEventListener("click", resetPosts);
+
   function event_handler(event) {
     all.classList.add('is-active-all');
     button.classList.remove('is-active');
     button.setAttribute('data-state', 'inactive')
-    resetPosts()
+    resetGallery()
     console.log(event);
   }
-  
   // Assign the listener callback to a variable
   var doClick = (event) => event_handler(event);  
- all.addEventListener('click', doClick);
+  all.addEventListener('click', doClick);
 
   console.log(button)
   if (buttonState =='inactive') {
     button.classList.add('is-active');
     button.setAttribute('data-state', 'active');
     all.classList.remove('is-active-all');
-    handleFilterPosts(param)
+    handleFilterGallery(param)
   } else {
     button.classList.remove('is-active');
     button.setAttribute('data-state', 'inactive')
-    resetPosts()
+    resetGallery()
   } 
 }
-const handleFilterPosts = (param) => {
+const handleFilterGallery = (param) => {
   let filteredPosts = [...postsData].filter(post => post.category.name == param);
   
   
   postsContainer.innerHTML = "";
-  filteredPosts.map(post => createPost(post))
+  filteredPosts.map(post => GenerateGallery(post))
 };
 
-const resetPosts = () => {
+const resetGallery = () => {
   postsContainer.innerHTML = "";
-  postsData.map((post) => createPost(post));
+  postsData.map((post) => GenerateGallery(post));
 }
 
 // ----------- EditionMode -------------
