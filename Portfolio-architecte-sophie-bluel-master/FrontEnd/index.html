@@ -93,14 +93,55 @@
 		</ul>
 	</nav>
 </footer>
-<div class="modal">
-	<h2>Galerie photo</h2>
-	<form action="#" method="post">
-	<div class="custom_gallery">
+<div class="modal-container">
+	<div class="modal">
+		<div class="close_modale"><i class="fa-solid fa-xmark"></i></div>
+		<h2>Galerie photo</h2>
+		<form action="#" method="post">
+			<div class="custom_gallery">
+			</div>
+			<div class="separation"></div>
+			<div class="add_works">ajouter un project</div>
+			<input id="no_design" type="submit" value="Supprimer la gallerie">
+		</form>
 	</div>
-	<button class="add_works">ajouter un project</button>
-	<input type="submit" value="Supprimer la gallerie">
-</form>
+	<div class="modal_2">
+		<div class="icons_modale">
+			<div class="back_modale"><i class="fa-solid fa-arrow-left"></i></div>
+			<div class="close_modale"><i class="fa-solid fa-xmark"></i></div>
+		</div>
+		<h2>Ajout Photo</h2>
+		<form action="#" method="post" enctype="multipart/form-data" >
+			<div class="background_image">
+				<img src="#" alt="" id="image" >
+				<div class="image-upload">
+					<label for="fileToUpload">
+						<i class="fa-regular fa-image"></i>
+						<!-- <img class="image-focus" src="" alt=""> -->
+					</label>
+					<input type="file" id="fileToUpload" onchange="previewPicture(this)" accept=".jpg, .png, .gif" required>
+					<label for="fileToUpload">
+						<div class="button_design">+ Ajouter photo</div>
+					</label>
+					<p class="info_upload">jpg, png : 4mo max</p>
+				</div>
+			</div> 
+			<div class="form_texteria">
+				<div class="title">
+					<label for="title">Titre</label>
+						<input type="text" name="title" id="title">
+				</div>
+				<div class="categorie">
+					<label for="categorie">Catégorie</label>
+					<select id="form_select" class="box">
+						
+					</select>
+				</div>
+			</div>   
+			<div class="separation"></div>
+            <input id="valid_new_work" type="submit" value="Valider">
+		</form>
+	</div>
 </div>
 <script src="script.js"></script>
 </body>

@@ -2,7 +2,7 @@ const Url = "http://localhost:5678/api/";
 const all = document.querySelector(".all_button");
 const postsContainer = document.querySelector(".gallery");
 const filterContainer = document.querySelector(".filter");
-const editionGallery = document.querySelector(".edition_mode");
+const editionGallery = document.querySelectorAll(".edition_mode");
 
 let postsData = "";
 let filterData = "";
@@ -113,22 +113,15 @@ function editionModeActive () {
   }
 };
 
-editionGallery.addEventListener('click', customGallery)
-
-const iconDelete = document.querySelector(".delete_button")
-iconDelete.addEventListener("click", (e) => {
-    console.log("DeleteClick");
-    e.preventDefault();
-});
+editionGallery.forEach(el=>el.addEventListener("click", customGallery));
 
 function customGallery (){
- const modale = document.querySelector(".modal")
+ const modale = document.querySelector(".modal-container")
  modale.style.display = "block"
 fetchGallery().catch(error => {
   error.message; // 'An error has occurred: 404'
 });
 console.log("test")
-
 };
 
 const galleryCustom = document.querySelector(".custom_gallery");
@@ -142,7 +135,7 @@ async function fetchGallery() {
   gallery.className = "gallery_post";
   gallery.innerHTML = `<div><div class="gallery_edit"><img class="gallery_image" src="${imageUrl}">
   <div class="gallery_edit_content">
-  <div class="delete_button"><i class="fa-regular fa-trash-can"></i></div>
+  <div class="delete_button" id="${id}"><i class="fa-regular fa-trash-can"></i></div>
   </div>
   </div>
         <p class="post-title">Editer</p>
@@ -150,36 +143,16 @@ async function fetchGallery() {
   `;
   galleryCustom.append(gallery);
 });
-// const iconDelete = document.querySelector(".delete_button")
-// //     // Création des balises
-// const article = post;
-// console.log(`${article.id}`)
-// iconDelete.addEventListener("click", async (e) => {
-//   console.log("testClick");
-//   e.preventDefault();
-//   e.stopPropagation();
-//   const iconeElement = article.id;
-//   let monToken = localStorage.getItem("token");
-//   console.log(iconeElement);
-//   let response = await fetch(
-//   `${Url}${iconeElement}`,
-//   {
-//     method: "DELETE",
-//     headers: {
-//       accept: "*/*",
-//       Authorization: `Bearer ${monToken}`,
-//     },
-//   }
-//   );
-//   if (response.ok) {
-//     return false;
-//     // if HTTP-status is 200-299
-//     //alert("Photo supprimé avec succes");
-//     // obtenir le corps de réponse (la méthode expliquée ci-dessous)
-//   } else {
-//     alert("Echec de suppression");
-//   }
-// });
+const iconDelete = document.querySelectorAll(".delete_button");
+
+  console.log(iconDelete[0].id)
+  iconDelete.forEach(element => element.addEventListener("click", (event) => {
+    const iconeElement = event.currentTarget.id;
+    console.log(`DeleteWorks ${iconeElement}`);
+    // DeleteWorks(iconeElement)
+    event.stopPropagation();
+  }));
+
 };
 
 function DeleteWorks(id) {
@@ -207,21 +180,115 @@ const addWorks = document.querySelector(".add_works");
 addWorks.addEventListener("click", addNewWorks)
 
 function addNewWorks() {
+  const modalgallery = document.querySelector(".modal")
+  modalgallery.style.display = "none"
+  const modalAddNewWorks = document.querySelector(".modal_2")
+  modalAddNewWorks.style.display = "block"
+  fetchCategory()
   console.log("addNewWorks");
 }
 
+const backModale = document.querySelector(".back_modale");
+const closeModale = document.querySelectorAll(".close_modale");
+
+backModale.addEventListener("click", backModal);
+closeModale.forEach(element => element.addEventListener("click", closedModal));
+
+function backModal() {
+  const modalgallery = document.querySelector(".modal")
+  modalgallery.style.display = "block"
+  const modalAddNewWorks = document.querySelector(".modal_2")
+  modalAddNewWorks.style.display = "none"
+};
+function closedModal() {
+  const modale = document.querySelector(".modal-container")
+  modale.style.display = "none"
+  galleryCustom.innerHTML = "";
+  const modalgallery = document.querySelector(".modal")
+  modalgallery.style.display = "block"
+  const modalAddNewWorks = document.querySelector(".modal_2")
+  modalAddNewWorks.style.display = "none"
+};
+
+ // L'image img#image
+ const image = document.getElementById("image");
+ const imageUpload = document.querySelector(".image-upload");
+     
+ // La fonction previewPicture
+ const previewPicture  = function (e) {
+
+     // e.files contient un objet FileList
+     const [picture] = e.files
+      // Les types de fichier autorisés
+    var types = [ "image/jpg", "image/jpeg", "image/png" ];
+
+    // Vérification si "picture.type" se trouve dans "types"
+    if (types.includes(picture.type)) {
+        // On affiche l'image sur la page ...
+    }
+
+     // "picture" est un objet File
+     if (picture) {
+
+         // L'objet FileReader
+         var reader = new FileReader();
+
+         // L'événement déclenché lorsque la lecture est complète
+         reader.onload = function (e) {
+             // On change l'URL de l'image (base64)
+             image.src = e.target.result
+             image.style.display = "inline-block"
+             imageUpload.style.display = "none"
+         }
+
+         // On lit le fichier "picture" uploadé
+         reader.readAsDataURL(picture)
+
+     }
+ } 
+
+async function  fetchCategory() {
+  const response = await fetch(Url + "categories");
+  postsData = await response.json();
+  filterData = [
+    ...new Set(
+      postsData
+        .map((post) => post)
+    )
+  ];
+  console.log(filterData);
+  const selectCategory = document.querySelector("#form_select");
+  selectCategory.innerHTML = filterData.map(item =>`<option key={${item.id}>${item.name}</option>`);
+};
+
+const postNewWorks = document.querySelector("#valid_new_work")
+
+postNewWorks.addEventListener("click", PostWorks)
+
 function PostWorks() {
+
+    const Titleform = document.getElementById("title");
+    const Categorieform = document.getElementById("form_select");
+
+    const file = document.getElementById("fileToUpload"); //the File Upload input
+    const formdata = new FormData();
+
+    formdata.append("userpic", file.files[0],'Test1.jpg');
+
+
+    const item = JSON.stringify({
+        name: Titleform.value,
+        category: Categorieform.value,
+        formFile: formdata
+    });
+let monToken = localStorage.getItem("token");
 fetch(Url + "works", {
   method: "POST",
   headers: {
     "Authorization": `Bearer ${monToken}`,
     "Content-Type": "application/json",
   },
-  body: {
-    title: "",
-    imageUrl: "",
-    categoryId: 0,
-  }
+  body: item
 }).then(response => {
   if (response.ok) {
     return response.json();
@@ -229,6 +296,9 @@ fetch(Url + "works", {
     return Promise.reject(response.status);
   }
 })
+.then(result => {
+  console.log('succes', result);
+}) 
 .catch(error => {
   console.log(error);
 })
