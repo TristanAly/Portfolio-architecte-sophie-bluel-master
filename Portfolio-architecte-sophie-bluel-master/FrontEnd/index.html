@@ -32,7 +32,7 @@
 			<ul>
 				<li>projets</li>
 				<li>contact</li>
-				<a href="auth.html"><li>login</li></a>
+				<li><a href="auth.html">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -41,7 +41,7 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<div class="edition_mode align_txt_to_img">
+				<div id="active" class=" edition_mode align_txt_to_img">
 					<i class="fa-regular fa-pen-to-square"></i>
 					<p>Modifier</p>
 				</div>
@@ -56,7 +56,7 @@
 		<section id="portfolio">
 			<div class="my_project">
 			<h2>Mes Projets</h2>
-			<div class="edition_mode align_with_title edition_gallery">
+			<div id="active" class="edition_mode align_with_title">
 				<i class="fa-regular fa-pen-to-square"></i>
 				<p>Modifier</p>
 			</div>
@@ -93,6 +93,15 @@
 		</ul>
 	</nav>
 </footer>
+<div class="modal">
+	<h2>Galerie photo</h2>
+	<form action="#" method="post">
+	<div class="custom_gallery">
+	</div>
+	<button class="add_works">ajouter un project</button>
+	<input type="submit" value="Supprimer la gallerie">
+</form>
+</div>
 <script src="script.js"></script>
 </body>
 </html>

@@ -61,18 +61,17 @@ body {
 .bandeau{
 	width: 100%;
 	height: 60px;
-	display: flex;
+	display: none;
 	justify-content: center;
 	background: black;
 	color: white;
 	align-items: center;
-	display: none;
+	/* display: none; */
 }
 
 .edition_mode{
 	display: flex;
 	text-decoration: none;
-	/* display: none; */
 	cursor: pointer;
 }
 .edition_mode i {
@@ -143,6 +142,9 @@ nav a {
 	text-decoration: none;
     color: #1D6154;
 }
+nav a:hover {
+	color: #B1663C;
+}
 li:hover {
 	color: #B1663C;
 }
@@ -177,7 +179,9 @@ li:hover {
  margin-left: 10%;
  padding-top: 20px;
 }
-
+#active{
+ display: none;
+}
 .my_project{
 	display: flex;
 	justify-content: center;
@@ -348,3 +352,55 @@ footer nav ul li{
 	padding-right: 50px;
 }
 
+.modal{
+	background: white;
+	border: 1px solid #1D6154;
+	position: absolute;
+	left: 35vw;
+	top: 65vh;
+	padding: 30px;
+	display: none;
+	text-align: center;
+}
+.modal form{
+	display: flex;
+	flex-direction: column;
+}
+.modal form input{
+	margin-top: 10px;
+}
+.modal button {
+	font-size: 20px;
+	background: none;
+	border: none;
+	border-top: 2px solid #1D6154;
+	padding-top: 20px;
+}
+
+.custom_gallery{
+width: 500px;
+display: flex;
+flex-wrap: wrap;
+}
+.gallery_post{
+margin: 10px;
+}
+.gallery_image{
+object-fit: cover;
+width: 80px;
+height: 100px;
+}
+.gallery_edit{
+	position: relative;
+}
+.gallery_edit_content{
+	border-radius: 2px;
+	position: absolute;
+	right: 2px;
+	top: 2px;
+}
+.gallery_edit_content i{
+	background: white;
+	padding: 1px;
+	/* margin: 1px; */
+}
