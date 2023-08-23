@@ -274,7 +274,11 @@ async function PostWorks() {
 
     const Titleform = document.querySelector("#title");
     const Categorieform = document.querySelector("#categorie");
+// --------- 1er test
+    const imgUrl = document.getElementById('image').getAttribute('src');
+// --------- 2eme test   
     const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
+
     if (Titleform.value === "" || Categorieform.value === "" || imagefile === undefined) {
       alert("Merci de remplir tous les champs");
       return;
@@ -284,8 +288,8 @@ async function PostWorks() {
       } else {
   try {
     const formData = new FormData();
+    formData.append("imageUrl", imgUrl);
     formData.append("title", Titleform.value);
-    formData.append("imageUrl", imagefile);
     formData.append("categoryId", Categorieform.value);
 
   console.log("fonctionne" + formData)
