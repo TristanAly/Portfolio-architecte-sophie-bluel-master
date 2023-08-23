@@ -164,11 +164,15 @@ fetch(Url + `works/${id}`, {
           Authorization: `Bearer ${monToken}`,
         },
 }).then(response => {
-  if (response.ok) {
-        alert("Photo supprimé avec succes");
-  } else {
-    alert("Echec de suppression");
-  }
+  if (response.status === 204) {
+    console.log("DEBUG SUPPRESION DU PROJET " + this.classList[0])
+    window.location.href = "login.html";
+}
+// Token incorrect
+else if (response.status === 401) {
+    alert("Vous n'êtes pas autorisé à supprimer ce projet, merci de vous connecter avec un compte valide")
+    window.location.href = "login.html";
+}
 })
 .catch(error => {
   console.log(error);
@@ -243,7 +247,6 @@ function closedModal() {
 
          // On lit le fichier "picture" uploadé
          reader.readAsDataURL(picture)
-
      }
  } 
 
@@ -257,49 +260,65 @@ async function  fetchCategory() {
     )
   ];
   console.log(filterData);
-  const selectCategory = document.querySelector("#form_select");
-  selectCategory.innerHTML = filterData.map(item =>`<option key={${item.id}>${item.name}</option>`);
+  const selectCategory = document.querySelector("#categorie");
+  selectCategory.innerHTML = filterData.map(item =>`<option value="${item.id}">${item.name}</option>`);
+  console.log(selectCategory)
 };
 
-const postNewWorks = document.querySelector("#valid_new_work")
+const form = document.querySelector(".js-add-work");
+form.addEventListener("click", PostWorks)
 
-postNewWorks.addEventListener("click", PostWorks)
+async function PostWorks() {
 
-function PostWorks() {
+  console.log("postWork")
 
-    const Titleform = document.getElementById("title");
-    const Categorieform = document.getElementById("form_select");
+    const Titleform = document.querySelector("#title");
+    const Categorieform = document.querySelector("#categorie");
+    const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
+    if (Titleform.value === "" || Categorieform.value === "" || imagefile === undefined) {
+      alert("Merci de remplir tous les champs");
+      return;
+  } else if (Categorieform.value !== "1" && Categorieform.value !== "2" && Categorieform.value !== "3") {
+      alert("Merci de choisir une catégorie valide");
+      return;
+      } else {
+  try {
+    const formData = new FormData();
+    formData.append("title", Titleform.value);
+    formData.append("imageUrl", imagefile);
+    formData.append("categoryId", Categorieform.value);
 
-    const file = document.getElementById("fileToUpload"); //the File Upload input
-    const formdata = new FormData();
+  console.log("fonctionne" + formData)
 
-    formdata.append("userpic", file.files[0],'Test1.jpg');
-
-
-    const item = JSON.stringify({
-        name: Titleform.value,
-        category: Categorieform.value,
-        formFile: formdata
-    });
 let monToken = localStorage.getItem("token");
-fetch(Url + "works", {
+
+const response = await fetch(Url + "works", {
   method: "POST",
   headers: {
-    "Authorization": `Bearer ${monToken}`,
-    "Content-Type": "application/json",
+    Authorization: `Bearer ${monToken}`,
   },
-  body: item
-}).then(response => {
-  if (response.ok) {
-    return response.json();
-  } else {
-    return Promise.reject(response.status);
+  body: formData
+});
+  if (response.status === 201) {
+  alert("Projet ajouté avec succès :)");
+  closedModal();
+  fetchWorks().catch(error => {
+    error.message; // 'An error has occurred: 404'
+  });
+  } else if (response.status === 400) {
+    alert("Merci de remplir tous les champs");
+  } else if (response.status === 500) {
+      alert("Erreur serveur");
+  } else if (response.status === 401) {
+      alert("Vous n'êtes pas autorisé à ajouter un projet");
+      window.location.href = "login.html";
+  } else if (response.status === 405) {
+      alert("Cette action ne fonctionne pas");
+      window.location.href = "index.html";
   }
-})
-.then(result => {
-  console.log('succes', result);
-}) 
-.catch(error => {
-  console.log(error);
-})
 }
+catch(error) {
+  console.log(error);
+}}
+}
+

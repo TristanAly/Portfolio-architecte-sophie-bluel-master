@@ -507,40 +507,40 @@ height: 100px;
 	margin-top: 10px;
 	color: #444444;
 }
-.form_texteria{
+.form_title{
 	display: flex;
 	flex-direction: column;
 	margin: 10px 0;
 }
-.form_texteria .title{
+.form_title .title{
 	display: flex;
 	flex-direction: column;
 	text-align: left;
 }
-.form_texteria .categorie{
+.form_title .form_categorie{
 	display: flex;
 	flex-direction: column;
 	text-align: left;
 }
 
-.form_texteria input {
+.form_title input {
 	height: 50px;
 	font-size: 1.2em;
 	padding-left: 15px;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-.form_texteria select{
+.form_title select{
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-.form_texteria label {
+.form_title label {
 	margin: 1em 0 ;
 }
-#valid_new_work{
+#design_button{
 	font-family: "Syne";
 	font-size: 14px;
 	font-weight: 700;
