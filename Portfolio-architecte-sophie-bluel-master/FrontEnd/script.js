@@ -154,7 +154,7 @@ const iconDelete = document.querySelectorAll(".delete_button");
   iconDelete.forEach(element => element.addEventListener("click", (event) => {
     const iconeElement = event.currentTarget.id;
     console.log(`DeleteWorks ${iconeElement}`);
-    // DeleteWorks(iconeElement)
+    DeleteWorks(iconeElement)
     event.stopPropagation();
   }));
 
@@ -265,19 +265,25 @@ async function  fetchCategory() {
   console.log(selectCategory)
 };
 
+function changeTheColorOfButton() {
+  if (Titleform.value !== "") {
+    ButtonValider.style.background = "#1D6154";
+  } else {
+    ButtonValider.style.background = "#A7A7A7";
+  }
+}
+
 const form = document.querySelector(".js-add-work");
 form.addEventListener("click", PostWorks)
 
-async function PostWorks() {
+const ButtonValider = document.querySelector("#design_button");
+const Titleform = document.querySelector("#title");
+const Categorieform = document.querySelector("#categorie");
 
+const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
+async function PostWorks(event) {
+  event.preventDefault();
   console.log("postWork")
-
-    const Titleform = document.querySelector("#title");
-    const Categorieform = document.querySelector("#categorie");
-// --------- 1er test
-    const imgUrl = document.getElementById('image').getAttribute('src');
-// --------- 2eme test   
-    const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
 
     if (Titleform.value === "" || Categorieform.value === "" || imagefile === undefined) {
       alert("Merci de remplir tous les champs");
@@ -288,9 +294,9 @@ async function PostWorks() {
       } else {
   try {
     const formData = new FormData();
-    formData.append("imageUrl", imgUrl);
+    formData.append("image", imagefile);
     formData.append("title", Titleform.value);
-    formData.append("categoryId", Categorieform.value);
+    formData.append("category", Categorieform.value);
 
   console.log("fonctionne" + formData)
 
@@ -302,13 +308,12 @@ const response = await fetch(Url + "works", {
     Authorization: `Bearer ${monToken}`,
   },
   body: formData
-});
+})
   if (response.status === 201) {
   alert("Projet ajouté avec succès :)");
-  closedModal();
-  fetchWorks().catch(error => {
-    error.message; // 'An error has occurred: 404'
-  });
+  closedModal(event);
+  window.location.href = "index.html";
+
   } else if (response.status === 400) {
     alert("Merci de remplir tous les champs");
   } else if (response.status === 500) {
