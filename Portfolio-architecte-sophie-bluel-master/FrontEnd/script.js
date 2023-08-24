@@ -26,6 +26,7 @@ async function fetchWorks() {
   ];
   console.log(filterData);
   filterData.map((filter) => GenerateButtonFilter(filter));
+  fetchGallery(postsData)
 };
 editionModeActive()
 fetchWorks().catch(error => {
@@ -125,56 +126,52 @@ editionGallery.forEach(el=>el.addEventListener("click", customGallery));
 function customGallery (){
  const modale = document.querySelector(".modal-container")
  modale.style.display = "block"
-fetchGallery().catch(error => {
-  error.message; // 'An error has occurred: 404'
-});
-console.log("test")
+ 
 };
 
-async function fetchGallery() {
-  const response = await fetch(Url + "works");
-  postsData = await response.json();
-  postsData.map((post) => {
-  const { id, title, imageUrl, category } = post;
-  const gallery = document.createElement("div");
-  gallery.className = "gallery_post";
-  gallery.innerHTML = `<div><div class="gallery_edit"><img class="gallery_image" src="${imageUrl}">
-  <div class="gallery_edit_content">
-  <div class="delete_button" id="${id}"><i class="fa-regular fa-trash-can"></i></div>
-  </div>
-  </div>
+
+function fetchGallery(works) {
+  for (let i = 0; i < works.length; i++) {
+    const work = works[i];
+
+    const gallery = document.createElement("div");
+    gallery.className = "gallery_post";
+    gallery.innerHTML = `<div><div class="gallery_edit"><img class="gallery_image" src="${works[i].imageUrl}" alt="${works[i].title}">
+    <div class="gallery_edit_content">
+    <div class="delete_button" deleteId="${works[i].id}"><i class="fa-regular fa-trash-can"></i></div>
+    </div>
+    </div>
         <p class="post-title">Editer</p>
         </div>
   `;
   galleryCustom.append(gallery);
-});
-const iconDelete = document.querySelectorAll(".delete_button");
 
-  console.log(iconDelete[0].id)
-  iconDelete.forEach(element => element.addEventListener("click", (event) => {
-    const iconeElement = event.currentTarget.id;
-    console.log(`DeleteWorks ${iconeElement}`);
-    DeleteWorks(iconeElement)
-    event.stopPropagation();
-  }));
+  const trash = gallery.querySelector(".delete_button");
+  const id = trash.getAttribute("deleteId");
+  trash.addEventListener("click", function(e){
+    e.preventDefault();
+    console.log(id)
+    DeleteWorks(id)
+  })
+  }
+}
 
-};
-
-function DeleteWorks(id) {
+async function DeleteWorks(id) {
 let monToken = localStorage.getItem("token");
-fetch(Url + `works/${id}`, {
+  await fetch(Url + `works/${id}`, {
         method: "DELETE",
         headers: {
           accept: "*/*",
           Authorization: `Bearer ${monToken}`,
         },
 }).then(response => {
-  if (response.status === 204) {
-    console.log("DEBUG SUPPRESION DU PROJET " + this.classList[0])
-    window.location.href = "login.html";
-}
-// Token incorrect
-else if (response.status === 401) {
+  if (response.ok) {
+    alert("Projet supprimer ce projet")
+    closedModal()
+    fetchWorks().catch(error => {
+      error.message; // 'An error has occurred: 404'
+    });
+} else {
     alert("Vous n'êtes pas autorisé à supprimer ce projet, merci de vous connecter avec un compte valide")
     window.location.href = "login.html";
 }
@@ -202,9 +199,7 @@ function backModal() {
   modalAddNewWorks.style.display = "none"
 };
 function closedModal() {
-  if (modale === null) return
   modale.style.display = "none"
-  galleryCustom.innerHTML = "";
   modalgallery.style.display = "block"
   modalAddNewWorks.style.display = "none"
 };
@@ -216,7 +211,6 @@ window.addEventListener("keydown", function(e) {
 window.addEventListener("click", function(e) {
   if (e.target === modale) {
     modale.style.display = "none"
-    galleryCustom.innerHTML = "";
   }
 });
 
@@ -273,61 +267,98 @@ function changeTheColorOfButton() {
   }
 }
 
-const form = document.querySelector(".js-add-work");
-form.addEventListener("click", PostWorks)
+const form = document.querySelector(".modal_2 form");
+// form.addEventListener("click", PostWorks)
+const Titleform = document.querySelector("#title");
 
 const ButtonValider = document.querySelector("#design_button");
-const Titleform = document.querySelector("#title");
-const Categorieform = document.querySelector("#categorie");
 
-const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
-async function PostWorks(event) {
-  event.preventDefault();
+// 1 // ----- Vercel API method for Post Live Server -----
+
+// async function PostWorks(event) {
+//   event.preventDefault();
+//   const Titleform = document.querySelector("#title");
+//   const Categorieform = document.querySelector("#categorie");
+  
+//   const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
+//   console.log("postWork")
+
+//     if (Titleform.value === "" || Categorieform.value === "" || imagefile === undefined) {
+//       alert("Merci de remplir tous les champs");
+//       return;
+//   } else if (Categorieform.value !== "1" && Categorieform.value !== "2" && Categorieform.value !== "3") {
+//       alert("Merci de choisir une catégorie valide");
+//       return;
+//       } else {
+//   try {
+//     const formData = new FormData();
+//     formData.append("image", imagefile);
+//     formData.append("title", Titleform.value);
+//     formData.append("category", Categorieform.value);
+
+//   console.log("fonctionne" + formData)
+
+// let monToken = localStorage.getItem("token");
+
+// const response = await fetch(Url + "works", {
+//   method: "POST",
+//   headers: {
+//     Authorization: `Bearer ${monToken}`,
+//   },
+//   body: formData
+// })
+//   if (response.status === 201) {
+//   alert("Projet ajouté avec succès :)");
+//   closedModal(event);
+//   window.location.href = "index.html";
+
+//   } else if (response.status === 400) {
+//     alert("Merci de remplir tous les champs");
+//     console.log('error here')
+//   } else if (response.status === 500) {
+//       alert("Erreur serveur");
+//   } else if (response.status === 401) {
+//       alert("Vous n'êtes pas autorisé à ajouter un projet");
+//       window.location.href = "login.html";
+//   } else if (response.status === 405) {
+//       alert("Cette action ne fonctionne pas");
+//       window.location.href = "index.html";
+//   }
+// }
+// catch(error) {
+//   console.log(error);
+// }}
+// }
+
+// 2 // ----- submit method for Post -----
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+  // let datas = new FormData(form)
+  const Titleform = document.querySelector("#title");
+  const Categorieform = document.querySelector("#categorie");
+  
+  const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
   console.log("postWork")
-
-    if (Titleform.value === "" || Categorieform.value === "" || imagefile === undefined) {
-      alert("Merci de remplir tous les champs");
-      return;
-  } else if (Categorieform.value !== "1" && Categorieform.value !== "2" && Categorieform.value !== "3") {
-      alert("Merci de choisir une catégorie valide");
-      return;
-      } else {
-  try {
-    const formData = new FormData();
+  const formData = new FormData();
     formData.append("image", imagefile);
     formData.append("title", Titleform.value);
     formData.append("category", Categorieform.value);
-
-  console.log("fonctionne" + formData)
-
-let monToken = localStorage.getItem("token");
-
-const response = await fetch(Url + "works", {
-  method: "POST",
-  headers: {
-    Authorization: `Bearer ${monToken}`,
-  },
-  body: formData
+  let monToken = localStorage.getItem("token");
+  await fetch(Url + "works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${monToken}`,
+      },
+      body: formData
+    })
+    .then((response) =>{
+      return response.json();
+    })
+    .then((result) =>{
+      alert("Projet ajouté avec succès :)");
+      closedModal();
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 })
-  if (response.status === 201) {
-  alert("Projet ajouté avec succès :)");
-  closedModal(event);
-  window.location.href = "index.html";
-
-  } else if (response.status === 400) {
-    alert("Merci de remplir tous les champs");
-  } else if (response.status === 500) {
-      alert("Erreur serveur");
-  } else if (response.status === 401) {
-      alert("Vous n'êtes pas autorisé à ajouter un projet");
-      window.location.href = "login.html";
-  } else if (response.status === 405) {
-      alert("Cette action ne fonctionne pas");
-      window.location.href = "index.html";
-  }
-}
-catch(error) {
-  console.log(error);
-}}
-}
-
