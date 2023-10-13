@@ -122,6 +122,8 @@ editionGallery.forEach((el) => el.addEventListener("click", customGallery));
 function customGallery() {
   const modale = document.querySelector(".modal-container");
   modale.style.display = "block";
+  const modalAddNewWorks = document.querySelector(".modal_2");
+  modalAddNewWorks.style.display = "none";
 }
 
 function fetchGallery(works) {
