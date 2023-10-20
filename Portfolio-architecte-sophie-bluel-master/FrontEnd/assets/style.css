@@ -553,9 +553,11 @@ footer nav ul li {
   cursor: pointer;
 }
 .gallery_edit_content i {
-  background: white;
-  padding: 1px;
-  /* margin: 1px; */
+  background: black;
+  border-radius: 2px;
+  padding: 3px;
+  color: white;
+  margin: 2px;
 }
 .image-upload input {
   visibility: hidden;
@@ -663,6 +665,16 @@ footer nav ul li {
 
 input[type="submit"] {
   cursor: pointer;
+}
+#Error_title {
+  color: red;
+  font-size: 18px;
+  padding-top: 8px;
+}
+#Error_Image {
+  color: red;
+  font-size: 18px;
+  padding-top: 8px;
 }
 
 @media (max-width: 1618px) {

@@ -185,7 +185,6 @@ backModale.addEventListener("click", backModal);
 closeModale.forEach((element) =>
   element.addEventListener("click", closedModal)
 );
-
 function addNewWorks() {
   const modalgallery = document.querySelector(".modal");
   modalgallery.style.display = "none";
@@ -244,18 +243,29 @@ const previewPicture = function (e) {
     // On lit le fichier "picture" uploadé
     reader.readAsDataURL(picture);
   }
+  // Affichez le bouton "Modifier l'image"
+  changeImageButton.style.display = "block";
 };
 
 async function fetchCategory() {
-  const response = await fetch(Url + "categories");
-  postsData = await response.json();
-  filterData = [...new Set(postsData.map((post) => post))];
-  console.log(filterData);
-  const selectCategory = document.querySelector("#categorie");
-  selectCategory.innerHTML = filterData.map(
-    (item) => `<option value="${item.id}">${item.name}</option>`
-  );
-  console.log(selectCategory);
+  try {
+    const response = await fetch(Url + "categories");
+    const categories = await response.json();
+
+    if (Array.isArray(categories) && categories.length > 0) {
+      const selectCategory = document.querySelector("#categorie");
+      selectCategory.innerHTML = categories.map(
+        (category) => `<option value="${category.id}">${category.name}</option>`
+      );
+
+      console.log(selectCategory);
+    } else {
+      // Gérer le cas où postsData est vide ou non défini
+      console.log("Aucune donnée de catégorie trouvée.");
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des catégories:", error);
+  }
 }
 
 const form = document.querySelector(".modal_2 form");
@@ -270,40 +280,91 @@ function changeTheColorOfButton() {
     ButtonValider.style.background = "#A7A7A7";
   }
 }
+let formSubmitted = false; // Variable pour suivre si le formulaire a été soumis
+// Gestionnaire d'événements pour le champ de fichier
+document.getElementById("fileToUpload").addEventListener("change", function () {
+  const Titleform = document.querySelector("#title");
+  const errorTitle = document.querySelector("#Error_title");
+  const imagefile = this.files[0];
+  const errorImage = document.querySelector("#Error_Image");
 
+  if (!imagefile) {
+    errorImage.innerHTML = "<p>*L'image n'est pas saisie !</p>";
+  } else {
+    errorImage.innerHTML = "";
+    // Supprimez l'élément d'image existant
+    const image = document.getElementById("image");
+    image.style.display = "none";
+    image.src = "";
+
+    // Affichez le bouton "Modifier l'image"
+    const changeImageButton = document.getElementById("changeImageButton");
+    changeImageButton.style.display = "block";
+  }
+});
 // 2 // ----- submit method for Post -----
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  // let datas = new FormData(form)
   const Titleform = document.querySelector("#title");
   const Categorieform = document.querySelector("#categorie");
-
   const imagefile = document.getElementById("fileToUpload").files[0]; //the File Upload input
+  const errorTitle = document.querySelector("#Error_title");
+  const errorImage = document.querySelector("#Error_Image");
   console.log("postWork");
-  const isFormValid = Titleform.value && imagefile;
-  if (isFormValid) {
-    const formData = new FormData();
-    formData.append("image", imagefile);
-    formData.append("title", Titleform.value);
-    formData.append("category", Categorieform.value);
-    let monToken = localStorage.getItem("token");
-    try {
-      const response = await fetch(Url + "works", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${monToken}`,
-        },
-        body: formData,
-      });
+  let isImageError = false;
+  let isTitleError = false;
 
-      const result = await response.json();
-      alert("Projet ajouté avec succès :)");
-      closedModal();
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  if (!Titleform.value) {
+    errorTitle.innerHTML = "<p>*Le titre n'est pas saisi !</p>";
+    isTitleError = true;
   } else {
-    // Affichez un message d'erreur ou prenez une autre action appropriée
-    console.error("Le titre et/ou l'image ne sont pas saisis.");
+    errorTitle.innerHTML = "";
   }
+
+  if (!imagefile) {
+    errorImage.innerHTML = "<p>*L'image n'est pas saisie !</p>";
+    isImageError = true;
+  } else {
+    errorImage.innerHTML = "";
+  }
+
+  if (isTitleError || isImageError) {
+    // Au moins une erreur est présente, n'envoyez pas le formulaire
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", imagefile);
+  formData.append("title", Titleform.value);
+  formData.append("category", Categorieform.value);
+  let monToken = localStorage.getItem("token");
+  try {
+    const response = await fetch(Url + "works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${monToken}`,
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+    alert("Projet ajouté avec succès :)");
+    closedModal();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+});
+
+// Récupérez la référence au bouton "Modifier l'image"
+const changeImageButton = document.getElementById("changeImageButton");
+
+// Lorsque l'utilisateur clique sur "Modifier l'image"
+changeImageButton.addEventListener("click", function () {
+  // Réinitialisez le champ de fichier pour permettre la sélection d'une nouvelle image
+  const fileToUpload = document.getElementById("fileToUpload");
+  fileToUpload.value = ""; // Effacez la sélection actuelle
+  fileToUpload.click(); // Ouvrez la boîte de dialogue de sélection de fichier
+
+  // Cachez le bouton "Modifier l'image" jusqu'à ce qu'une nouvelle image soit sélectionnée
+  changeImageButton.style.display = "none";
 });

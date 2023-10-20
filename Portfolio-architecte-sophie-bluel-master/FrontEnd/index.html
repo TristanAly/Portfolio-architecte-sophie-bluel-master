@@ -144,7 +144,6 @@
                 name="fileToUpload"
                 onchange="previewPicture(this)"
                 accept=".jpg, .png, .gif"
-                required
               />
               <label for="fileToUpload">
                 <span class="button_design">+ Ajouter photo</span>
@@ -152,6 +151,10 @@
               <p class="info_upload">jpg, png : 4mo max</p>
             </div>
           </div>
+          <button id="changeImageButton" style="display: none">
+            Modifier l'image
+          </button>
+          <div id="Error_Image"></div>
           <div class="form_title">
             <div class="title">
               <label for="title">Titre</label>
@@ -162,6 +165,7 @@
                 onkeyup="changeTheColorOfButton()"
               />
             </div>
+            <div id="Error_title"></div>
             <div class="form_categorie">
               <label for="categorie">Catégorie</label>
               <select name="categorie" id="categorie" class="box"></select>
