@@ -96,7 +96,7 @@ const handleFilterGallery = (param) => {
   filteredPosts.map((post) => GenerateGallery(post));
 };
 
-const resetGalFlery = () => {
+const resetGallery = () => {
   postsContainer.innerHTML = "";
   postsData.map((post) => GenerateGallery(post));
 };
