@@ -32,7 +32,7 @@ const GenerateGallery = (postData) => {
   const { title, imageUrl, category } = postData;
   const post = document.createElement("div");
   post.className = "post";
-  post.innerHTML = `<img class="post-image" src="${imageUrl}"><div class="post-content">
+  post.innerHTML = `<img class="post-image" src="${imageUrl}" alt="Une photographie: ${title}"><div class="post-content">
         <p class="post-title">${title}</p>
       </div>
   `;

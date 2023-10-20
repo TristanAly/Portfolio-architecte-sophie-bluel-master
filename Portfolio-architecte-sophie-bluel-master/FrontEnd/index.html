@@ -135,8 +135,9 @@
           <div class="background_image">
             <img src="#" alt="" id="image" />
             <div class="image-upload">
-              <label for="fileToUpload">
+              <label for="fileToUpload" class="buttonUploadImage">
                 <i class="fa-regular fa-image"></i>
+                <span class="button_design">+ Ajouter photo</span>
               </label>
               <input
                 type="file"
@@ -145,13 +146,11 @@
                 onchange="previewPicture(this)"
                 accept=".jpg, .png, .gif"
               />
-              <label for="fileToUpload">
-                <span class="button_design">+ Ajouter photo</span>
-              </label>
               <p class="info_upload">jpg, png : 4mo max</p>
             </div>
           </div>
           <button id="changeImageButton" style="display: none">
+            <i class="fa-regular fa-pen-to-square"></i>
             Modifier l'image
           </button>
           <div id="Error_Image"></div>

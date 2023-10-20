@@ -676,7 +676,16 @@ input[type="submit"] {
   font-size: 18px;
   padding-top: 8px;
 }
-
+#changeImageButton {
+  margin: 0 auto;
+  padding: 4px 20px;
+  background: #e8f1f6;
+  border: 1px solid;
+}
+.buttonUploadImage {
+  display: flex;
+  flex-direction: column;
+}
 @media (max-width: 1618px) {
   .modal {
     margin: 10vh auto;
