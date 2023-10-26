@@ -72,7 +72,7 @@ const handleButtonClick = (e, param) => {
     console.log(event);
   }
   // Assign the listener callback to a variable
-  var doClick = (event) => event_handler(event);
+  let doClick = (event) => event_handler(event);
   all.addEventListener("click", doClick);
 
   console.log(button);
@@ -224,7 +224,7 @@ const previewPicture = function (e) {
   // e.files contient un objet FileList
   const [picture] = e.files;
   // Les types de fichier autorisés
-  var types = ["image/jpg", "image/jpeg", "image/png"];
+  let types = ["image/jpg", "image/jpeg", "image/png"];
   // Vérification si "picture.type" se trouve dans "types"
   if (types.includes(picture.type)) {
     // On affiche l'image sur la page ...
@@ -232,7 +232,7 @@ const previewPicture = function (e) {
   // "picture" est un objet File
   if (picture) {
     // L'objet FileReader
-    var reader = new FileReader();
+    let reader = new FileReader();
     // L'événement déclenché lorsque la lecture est complète
     reader.onload = function (e) {
       // On change l'URL de l'image (base64)
