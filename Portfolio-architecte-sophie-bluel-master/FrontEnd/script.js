@@ -20,6 +20,7 @@ async function fetchWorks() {
   postsData.map((post) => GenerateGallery(post));
   filterData = [...new Set(postsData.map((post) => post.category.name))];
   console.log(filterData);
+  console.log(postsData);
   filterData.map((filter) => GenerateButtonFilter(filter));
   fetchGallery(postsData);
 }
@@ -91,7 +92,7 @@ const handleFilterGallery = (param) => {
   let filteredPosts = [...postsData].filter(
     (post) => post.category.name == param
   );
-
+  console.log(filteredPosts);
   postsContainer.innerHTML = "";
   filteredPosts.map((post) => GenerateGallery(post));
 };
@@ -146,7 +147,7 @@ function fetchGallery(works) {
     const id = trash.getAttribute("deleteId");
     trash.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log(id);
+      console.log("Projet avec l'id: " + id + " est effacé avec succées");
       DeleteWorks(id);
     });
   }
@@ -259,6 +260,7 @@ async function fetchCategory() {
       );
 
       console.log(selectCategory);
+      console.log(categories);
     } else {
       // Gérer le cas où postsData est vide ou non défini
       console.log("Aucune donnée de catégorie trouvée.");
@@ -348,6 +350,7 @@ form.addEventListener("submit", async function (e) {
     });
 
     const result = await response.json();
+    console.log(result);
     alert("Projet ajouté avec succès :)");
     closedModal();
   } catch (error) {
